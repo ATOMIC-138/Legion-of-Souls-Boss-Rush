@@ -1,22 +1,22 @@
-import { WORLD_CONFIG, MINION_DATA, MYTHIC_RECIPES } from "./data.js?v=8";
-import { InputHandler } from "./input.js?v=8";
-import { Player } from "./player.js?v=8";
-import { ObjectPool } from "./pool.js?v=8";
-import { Quadtree } from "./quadtree.js?v=8";
-import { Enemy } from "./enemy.js?v=8";
-import { WaveManager } from "./waveManager.js?v=8";
-import { Minion } from "./minion.js?v=8";
-import { ProjectileManager } from "./projectile.js?v=8";
-import { ItemManager } from "./item.js?v=8";
-import { LevelUpManager } from "./levelUpManager.js?v=8";
-import { SynergyManager } from "./synergyManager.js?v=8";
-import { VFXManager } from "./vfx.js?v=8";
-import { SpriteRenderer } from "./spriteRenderer.js?v=8";
-import { SoundManager } from "./soundManager.js?v=8";
-import { MetaProgressionManager } from "./metaManager.js?v=8";
-import { BossHazardManager } from "./bossHazardManager.js?v=8";
-import { ArenaRenderer } from "./arenaRenderer.js?v=8";
-import { ShrineManager } from "./shrineManager.js?v=8";
+import { WORLD_CONFIG, MINION_DATA, MYTHIC_RECIPES } from "./data.js?v=9";
+import { InputHandler } from "./input.js?v=9";
+import { Player } from "./player.js?v=9";
+import { ObjectPool } from "./pool.js?v=9";
+import { Quadtree } from "./quadtree.js?v=9";
+import { Enemy } from "./enemy.js?v=9";
+import { WaveManager } from "./waveManager.js?v=9";
+import { Minion } from "./minion.js?v=9";
+import { ProjectileManager } from "./projectile.js?v=9";
+import { ItemManager } from "./item.js?v=9";
+import { LevelUpManager } from "./levelUpManager.js?v=9";
+import { SynergyManager } from "./synergyManager.js?v=9";
+import { VFXManager } from "./vfx.js?v=9";
+import { SpriteRenderer } from "./spriteRenderer.js?v=9";
+import { SoundManager } from "./soundManager.js?v=9";
+import { MetaProgressionManager } from "./metaManager.js?v=9";
+import { BossHazardManager } from "./bossHazardManager.js?v=9";
+import { ArenaRenderer } from "./arenaRenderer.js?v=9";
+import { ShrineManager } from "./shrineManager.js?v=9";
 
 /**
  * 遊戲主控制器 (Game Engine - 終極完整版)
@@ -129,8 +129,7 @@ class Game {
     if (this.skillStanceBox) {
       this.skillStanceBox.addEventListener("click", () => {
         if (this.hasStarted && !this.isPaused && this.player) {
-          this.player.toggleStance(this.soundManager, this.vfx);
-          this.updateHUD();
+          this.togglePlayerStance();
         }
       });
     }
@@ -167,25 +166,63 @@ class Game {
     this.previewTime = 0;
     this.lastTimestamp = 0;
 
-    // 玩家快捷鍵：Enter / Space 開始遊戲、M 切換靜音
-    window.addEventListener("keydown", (e) => {
-      if (
-        !this.hasStarted &&
-        !this.gameoverModal.open &&
-        (!this.metaManager.codexModal || !this.metaManager.codexModal.open) &&
-        (e.code === "Enter" || e.code === "Space")
-      ) {
-        e.preventDefault();
-        this.beginGame();
-        return;
-      }
-      if (e.code === "KeyM") {
-        this.toggleAudioMute();
-      }
-    });
+    // 玩家快捷鍵：Enter / Space 開始遊戲、R / Tab 切換隨從陣型、M 切換靜音 (使用 capture 確保 Tab 不被瀏覽器劫持焦點)
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        const keyLower = (e.key || "").toLowerCase();
+        const isStanceKey =
+          e.code === "KeyR" ||
+          e.code === "Tab" ||
+          keyLower === "r" ||
+          keyLower === "tab";
+
+        if (
+          !this.hasStarted &&
+          !this.gameoverModal.open &&
+          (!this.metaManager.codexModal || !this.metaManager.codexModal.open) &&
+          (e.code === "Enter" || e.code === "Space")
+        ) {
+          e.preventDefault();
+          this.beginGame();
+          return;
+        }
+
+        if (isStanceKey && this.hasStarted && !this.isPaused && !this.gameoverModal.open) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!e.repeat && this.player) {
+            this.togglePlayerStance();
+          }
+          return;
+        }
+
+        if ((e.code === "KeyM" || keyLower === "m") && !e.repeat) {
+          this.toggleAudioMute();
+        }
+      },
+      { capture: true }
+    );
 
     window.addEventListener("resize", () => this.handleResize());
     this.handleResize();
+  }
+
+  togglePlayerStance() {
+    if (!this.player) return;
+    const newStance = this.player.toggleStance(this.soundManager, this.vfx);
+    const isPhalanx = newStance === "phalanx";
+    if (this.levelUpManager) {
+      this.levelUpManager.addFloatingText(
+        isPhalanx
+          ? "🛡️ 切換：鐵壁護衛陣 (全軍收縮躲招・減傷 40%)"
+          : "⚔️ 切換：自由狩獵陣 (主動索敵・傷害 +15%)",
+        this.player.x,
+        this.player.y - 42,
+        isPhalanx ? "#38bdf8" : "#facc15"
+      );
+    }
+    this.updateHUD();
   }
 
   toggleAudioMute() {
@@ -463,7 +500,7 @@ class Game {
         // 💰 擊殺貪婪黃金哥布林：爆出大量金幣、全圖磁鐵、烤雞與高級經驗寶石！
         this.soundManager.playMergeStar(3);
         this.vfx.spawnShockwave(enemy.x, enemy.y, 150, "#facc15", 0.5);
-        this.metaManager.addGold(95);
+        const goblinGold = this.metaManager.addGold(250);
         this.itemManager.spawnSpecialItem(enemy.x, enemy.y, "magnet");
         this.itemManager.spawnSpecialItem(enemy.x + 22, enemy.y, "meat");
         for (let g = 0; g < 6; g++) {
@@ -475,7 +512,7 @@ class Game {
           );
         }
         this.levelUpManager.addFloatingText(
-          "💰 擊殺貪婪黃金哥布林！獲得 +95 金幣 & 全圖磁鐵！",
+          `💰 擊殺貪婪黃金哥布林！獲得 +${goblinGold.toLocaleString()} 金幣 & 全圖磁鐵！`,
           enemy.x,
           enemy.y - 36,
           "#fde047"
@@ -559,12 +596,12 @@ class Game {
     this.sumKills.textContent = this.totalKills;
     this.sumLevel.textContent = `Lv.${this.player.level}`;
 
-    const earnedGold =
-      this.waveManager.currentWave * 10 +
-      this.totalKills * 2 +
-      (isVictory ? 300 : 40);
-    this.sumGold.textContent = `+${earnedGold} 💰`;
-    this.metaManager.addGold(earnedGold);
+    const baseGold =
+      this.waveManager.currentWave * 40 +
+      this.totalKills * 1 +
+      (isVictory ? 1500 : 50);
+    const actualEarnedGold = this.metaManager.addGold(baseGold);
+    this.sumGold.textContent = `+${actualEarnedGold.toLocaleString()} 💰`;
 
     const entries = [
       {
@@ -890,10 +927,16 @@ class Game {
 
     if (this.stanceIcon && this.stanceName && this.stanceDesc) {
       if (this.player.stance === "phalanx") {
+        if (this.skillStanceBox) {
+          this.skillStanceBox.className = "skill-slot ready stance-phalanx";
+        }
         this.stanceIcon.textContent = "🛡️";
         this.stanceName.textContent = "鐵壁護衛陣";
         this.stanceDesc.textContent = "貼身躲招 (減傷40%)";
       } else {
+        if (this.skillStanceBox) {
+          this.skillStanceBox.className = "skill-slot ready stance-assault";
+        }
         this.stanceIcon.textContent = "⚔️";
         this.stanceName.textContent = "自由狩獵陣";
         this.stanceDesc.textContent = "主動索敵 (傷害+15%)";

@@ -1,4 +1,4 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=8";
+import { SpriteRenderer } from "./spriteRenderer.js?v=9";
 
 /**
  * Minion (隨從實體 - ★3 終極覺醒技 + ★★★★ 神話泰坦 + 陣型切換 + 單體破甲平衡版)
@@ -282,10 +282,13 @@ export class Minion {
       Math.max(this.moveSpeed * 1.5, player.moveSpeed * 1.05) * overchargeMove;
 
     if (isPhalanx) {
-      // 🛡️ 鐵壁護衛陣：強制跟隨主角身邊 50~72px 護衛圈同步走位，並對射程內敵人開火/揮砍！
-      const phalanxOrbit = 54;
+      // 🛡️ 鐵壁護衛陣：立即放棄遠處目標，強制高速收縮至主角身邊 54~78px 護衛圈內同步走位躲招！
+      if (distToPlayer > 82) {
+        this.targetEnemy = null;
+      }
+      const phalanxOrbit = 52;
       if (distToPlayer > phalanxOrbit) {
-        const pullBoost = distToPlayer > 85 ? 1.85 : 1.15;
+        const pullBoost = distToPlayer > 85 ? 2.45 : 1.35;
         moveVx += (dxPlayer / distToPlayer) * effectiveFollowSpeed * pullBoost;
         moveVy += (dyPlayer / distToPlayer) * effectiveFollowSpeed * pullBoost;
       }

@@ -1,4 +1,4 @@
-import { ObjectPool } from "./pool.js?v=8";
+import { ObjectPool } from "./pool.js?v=9";
 
 /**
  * 視覺特效與戰鬥回饋系統 (VFXManager)

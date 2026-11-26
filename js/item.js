@@ -1,4 +1,4 @@
-import { ObjectPool } from "./pool.js?v=8";
+import { ObjectPool } from "./pool.js?v=9";
 
 /**
  * DropItem (掉落物實體：支援經驗寶石 Gem、全圖磁鐵 Magnet、烤雞靈藥 Meat、首領寶箱 Chest)

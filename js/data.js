@@ -573,51 +573,56 @@ export const BOSS_CHEST_REWARDS = [
   }
 ];
 
-// 局外永久天賦配置
+// 局外永久天賦配置 (進階漸進式經濟曲線：基礎費用提升 6~10 倍並隨等級指數成長)
 export const META_UPGRADE_CONFIG = [
   {
     id: "maxHpLevel",
     name: "❤️ 召喚師體魄",
     desc: "每級永久提升開局最大生命 +25",
-    baseCost: 30,
-    costStep: 25,
+    baseCost: 200,
+    costStep: 150,
+    costGrowth: 1.28,
     maxLevel: 10
   },
   {
     id: "startMinionsLevel",
     name: "👥 初始隨從編隊",
     desc: "每級開局額外多帶 +1 隻隨機隨從 (最高 +4)",
-    baseCost: 60,
-    costStep: 60,
+    baseCost: 600,
+    costStep: 450,
+    costGrowth: 1.55,
     maxLevel: 4
   },
   {
     id: "rerollLevel",
     name: "🎲 命運重骰次數",
     desc: "每級增加三選一抽卡刷新 (Reroll) 次數 +2",
-    baseCost: 40,
-    costStep: 35,
+    baseCost: 300,
+    costStep: 200,
+    costGrowth: 1.35,
     maxLevel: 6
   },
   {
     id: "attackBonusLevel",
     name: "⚔️ 統帥戰意強化",
     desc: "每級永久提升全軍隨從與主角傷害 +10%",
-    baseCost: 45,
-    costStep: 40,
+    baseCost: 400,
+    costStep: 280,
+    costGrowth: 1.36,
     maxLevel: 8
   },
   {
     id: "greedLevel",
     name: "💰 皇家賞金契約",
     desc: "每級永久提升結算與哥布林金幣收益 +20%",
-    baseCost: 50,
-    costStep: 45,
+    baseCost: 500,
+    costStep: 350,
+    costGrowth: 1.45,
     maxLevel: 5
   }
 ];
 
-// 👑 主角傳說造型與炫酷神兵光環商場 (Cosmetic Skins & Weapon Auras)
+// 👑 主角傳說造型與炫酷神兵光環商場 (傳說外觀終極收藏定價 x70 倍)
 export const PLAYER_SKINS = [
   {
     id: "skin_default",
@@ -638,7 +643,7 @@ export const PLAYER_SKINS = [
     name: "🔥 紅蓮煉獄魔導皇",
     subtitle: "黑金熔岩帝王披風・惡魔角冠・鳳凰火杖",
     desc: "展開熾熱火焰魔翼、頭戴黑曜金角王冠，腳踏紅蓮業火法陣！",
-    cost: 180,
+    cost: 12600,
     capeColor: "#991b1b",
     robeColor: "#450a0a",
     trimColor: "#f97316",
@@ -652,7 +657,7 @@ export const PLAYER_SKINS = [
     name: "🌌 虛空星神大君",
     subtitle: "次元紫晶星翼・懸浮星冕・銀河聖杖",
     desc: "背後展開六片懸浮虛空星能水晶翼，腳下旋轉銀河黑洞星盤！",
-    cost: 320,
+    cost: 22400,
     capeColor: "#581c87",
     robeColor: "#2e1065",
     trimColor: "#e879f9",
@@ -666,7 +671,7 @@ export const PLAYER_SKINS = [
     name: "⚡ 熾天使黃金武神",
     subtitle: "璀璨六翼黃金聖羽・神聖太陽輪・裁決雷杖",
     desc: "傳說級至高造型！展開璀璨黃金聖羽與太陽神環，法杖射出金色裁決聖雷！",
-    cost: 500,
+    cost: 35000,
     capeColor: "#b45309",
     robeColor: "#78350f",
     trimColor: "#fef08a",

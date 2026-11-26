@@ -1,4 +1,4 @@
-import { SHRINE_TYPES } from "./data.js?v=8";
+import { SHRINE_TYPES } from "./data.js?v=9";
 
 /**
  * 地圖隨機互動機關與「太古聖壇事件」管理器 (ShrineManager)
@@ -180,10 +180,10 @@ export class ShrineManager {
         m.isDowned = false;
         m.hp = Math.min(m.maxHp, m.hp + Math.round(m.maxHp * 0.5));
       }
-      metaManager.addGold(45);
+      const shrineGold = metaManager.addGold(180);
       levelUpManager.queueLevelUp();
       levelUpManager.addFloatingText(
-        "🌟 星辰賜福：全軍恢復生命 + 45金幣 + 免費隨從抽卡！",
+        `🌟 星辰賜福：全軍恢復生命 + ${shrineGold.toLocaleString()}金幣 + 免費隨從抽卡！`,
         player.x,
         player.y - 42,
         "#fde047"

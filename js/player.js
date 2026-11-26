@@ -1,5 +1,5 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=8";
-import { PLAYER_SKINS } from "./data.js?v=8";
+import { SpriteRenderer } from "./spriteRenderer.js?v=9";
+import { PLAYER_SKINS } from "./data.js?v=9";
 
 /**
  * Player (召喚師玩家實體 - 支援陣型切換、聖壇超載與傳說造型神兵)
@@ -246,10 +246,6 @@ export class Player {
     if (input.consumeKey("KeyE") || input.consumeRightClick()) {
       const mouseWorld = input.getMouseWorldPos(camera);
       this.triggerCommand(mouseWorld, soundManager, vfx);
-    }
-
-    if (input.consumeKey("KeyR") || input.consumeKey("Tab")) {
-      this.toggleStance(soundManager, vfx);
     }
 
     if (this.dashTimer > 0) {

@@ -17,25 +17,61 @@ export class InputHandler {
 
     window.addEventListener("keydown", (e) => {
       const code = e.code;
+      const key = (e.key || "").toLowerCase();
+
+      // 防止方向鍵與 Tab 鍵觸發瀏覽器捲動或焦點跳轉 (避免焦點離開遊戲畫布)
       if (
-        code === "KeyW" ||
-        code === "KeyA" ||
-        code === "KeyS" ||
-        code === "KeyD" ||
+        code === "Tab" ||
         code === "ArrowUp" ||
         code === "ArrowDown" ||
         code === "ArrowLeft" ||
         code === "ArrowRight"
       ) {
-        this.keys.add(code);
+        e.preventDefault();
       }
+
+      if (
+        code === "KeyW" ||
+        key === "w" ||
+        code === "KeyA" ||
+        key === "a" ||
+        code === "KeyS" ||
+        key === "s" ||
+        code === "KeyD" ||
+        key === "d" ||
+        code === "ArrowUp" ||
+        code === "ArrowDown" ||
+        code === "ArrowLeft" ||
+        code === "ArrowRight"
+      ) {
+        const mapped =
+          key === "w"
+            ? "KeyW"
+            : key === "a"
+              ? "KeyA"
+              : key === "s"
+                ? "KeyS"
+                : key === "d"
+                  ? "KeyD"
+                  : code;
+        this.keys.add(mapped);
+      }
+
       if (!e.repeat) {
         this.justPressed.add(code);
+        if (key === "e") this.justPressed.add("KeyE");
+        if (key === "r") this.justPressed.add("KeyR");
       }
     });
 
     window.addEventListener("keyup", (e) => {
-      this.keys.delete(e.code);
+      const code = e.code;
+      const key = (e.key || "").toLowerCase();
+      this.keys.delete(code);
+      if (key === "w") this.keys.delete("KeyW");
+      if (key === "a") this.keys.delete("KeyA");
+      if (key === "s") this.keys.delete("KeyS");
+      if (key === "d") this.keys.delete("KeyD");
     });
 
     window.addEventListener("mousemove", (e) => {

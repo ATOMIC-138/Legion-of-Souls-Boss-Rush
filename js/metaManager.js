@@ -5,8 +5,8 @@ import {
   MYTHIC_RECIPES,
   SYNERGY_RULES,
   ENEMY_DATA
-} from "./data.js?v=8";
-import { SpriteRenderer } from "./spriteRenderer.js?v=8";
+} from "./data.js?v=9";
+import { SpriteRenderer } from "./spriteRenderer.js?v=9";
 
 /**
  * 局外永久天賦、主角傳說造型商場與魔導圖鑑管理器 (MetaProgressionManager)
@@ -144,14 +144,18 @@ export class MetaProgressionManager {
 
   addGold(amount) {
     const greedMult = 1 + (this.state.upgrades.greedLevel || 0) * 0.2;
-    this.state.gold += Math.max(0, Math.round(amount * greedMult));
+    const finalAdded = Math.max(0, Math.round(amount * greedMult));
+    this.state.gold += finalAdded;
     this.saveState();
     this.renderShop();
+    return finalAdded;
   }
 
   getUpgradeCost(cfg) {
     const lv = this.state.upgrades[cfg.id] || 0;
-    return cfg.baseCost + lv * cfg.costStep;
+    const growth = cfg.costGrowth || 1.35;
+    const raw = (cfg.baseCost + lv * cfg.costStep) * Math.pow(growth, lv);
+    return Math.round(raw / 10) * 10;
   }
 
   buyUpgrade(cfg) {
@@ -199,7 +203,7 @@ export class MetaProgressionManager {
 
   renderShop() {
     if (this.goldDisplayEl) {
-      this.goldDisplayEl.textContent = this.state.gold;
+      this.goldDisplayEl.textContent = this.state.gold.toLocaleString();
     }
     if (!this.shopGridEl) return;
 
@@ -225,7 +229,7 @@ export class MetaProgressionManager {
         </div>
         <div class="meta-up-desc">${cfg.desc}</div>
         <button type="button" class="meta-buy-btn" ${!canAfford ? "disabled" : ""}>
-          ${isMax ? "已滿級 MAX" : `💰 ${cost} 金幣升級`}
+          ${isMax ? "已滿級 MAX" : `💰 ${cost.toLocaleString()} 金幣升級`}
         </button>
       `;
 
@@ -261,7 +265,7 @@ export class MetaProgressionManager {
               ? "✨ 已穿戴裝備中"
               : isUnlocked
                 ? "👑 點擊穿戴此造型"
-                : `💰 ${skin.cost} 金幣解鎖造型`
+                : `💰 ${skin.cost.toLocaleString()} 金幣解鎖造型`
           }
         </button>
       `;
