@@ -1,5 +1,5 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=11";
-import { PLAYER_SKINS } from "./data.js?v=11";
+import { SpriteRenderer } from "./spriteRenderer.js?v=12";
+import { PLAYER_SKINS } from "./data.js?v=12";
 
 /**
  * Player (召喚師玩家實體 - 支援陣型切換、聖壇超載與傳說造型神兵)
@@ -84,7 +84,7 @@ export class Player {
     // 等級與經驗值 (無上限平滑曲線起點)
     this.level = 1;
     this.currentExp = 0;
-    this.expToNextLevel = 10;
+    this.expToNextLevel = 8;
 
     // 受傷無敵幀 (秒) 與 蛛網緩速狀態
     this.invincibleDuration = 0.55;

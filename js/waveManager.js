@@ -1,4 +1,4 @@
-import { ENEMY_DATA, WORLD_CONFIG, WAVE_BOSS_POOLS } from "./data.js?v=11";
+import { ENEMY_DATA, WORLD_CONFIG, WAVE_BOSS_POOLS } from "./data.js?v=12";
 
 /**
  * 30 波次制動態生成、貪婪黃金哥布林亂入、隨機君王抽選與「大 Boss 清場單挑決鬥」管理器 (WaveManager)
@@ -100,12 +100,12 @@ export class WaveManager {
     }
 
     const progress = (this.currentWave - 1) / Math.max(1, this.maxWaves - 1);
-    const baseInterval = 1.08 - progress * 0.78;
+    const baseInterval = 1.15 - progress * 0.78;
 
     this.spawnTimer += dt;
     if (this.spawnTimer >= baseInterval) {
       this.spawnTimer = 0;
-      const batchCount = Math.min(9, 2 + Math.floor(this.currentWave / 4));
+      const batchCount = Math.min(7, 2 + Math.floor(this.currentWave / 5));
       this.spawnRegularWaveMob(this.currentWave, batchCount, player, viewport);
     }
   }
@@ -148,23 +148,23 @@ export class WaveManager {
   }
 
   spawnRegularWaveMob(wave, count, player, viewport) {
-    // 強化中後期波次成長曲線：確保後期面對 3~4 隻 ★3 與 ★4 神話大軍時，魔物依然具備十足壓迫感！
+    // 溫和漸進的小怪成長曲線：割草流暢且不至於後期暴死
     const hpScale =
       1 +
-      (wave - 1) * 0.24 +
-      Math.pow(Math.max(0, wave - 8), 1.55) * 0.14;
-    const dmgScale = 1 + (wave - 1) * 0.11;
-    const speedScale = 1 + (wave - 1) * 0.015;
+      (wave - 1) * 0.16 +
+      Math.pow(Math.max(0, wave - 10), 1.25) * 0.06;
+    const dmgScale = 1 + (wave - 1) * 0.065;
+    const speedScale = 1 + (wave - 1) * 0.008;
 
     for (let i = 0; i < count; i++) {
       let enemyId = "e_01";
       const r = Math.random();
       if (wave >= 16) {
-        enemyId = r < 0.2 ? "e_01" : r < 0.55 ? "e_02" : "e_04";
+        enemyId = r < 0.28 ? "e_01" : r < 0.62 ? "e_02" : "e_04";
       } else if (wave >= 8) {
-        enemyId = r < 0.34 ? "e_01" : r < 0.68 ? "e_02" : "e_04";
+        enemyId = r < 0.38 ? "e_01" : r < 0.7 ? "e_02" : "e_04";
       } else if (wave >= 3) {
-        enemyId = r < 0.55 ? "e_01" : "e_02";
+        enemyId = r < 0.58 ? "e_01" : "e_02";
       }
       this.spawnBatch(enemyId, 1, player, viewport, hpScale, dmgScale, speedScale);
     }

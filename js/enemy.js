@@ -1,4 +1,4 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=11";
+import { SpriteRenderer } from "./spriteRenderer.js?v=12";
 
 /**
  * Enemy (敵人、特色小 Boss 與 9 大傳說君王大 Boss 完整 AI 控制器)

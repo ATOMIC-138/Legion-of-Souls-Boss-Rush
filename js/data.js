@@ -212,13 +212,13 @@ export const SHRINE_TYPES = [
   }
 ];
 
-// 敵人、黃金哥布林、小 Boss 與九大傳說大 Boss 圖鑑 (高強度挑戰平衡版)
+// 敵人、黃金哥布林、小 Boss 與九大傳說大 Boss 圖鑑 (爽快割草與首領走位平衡版)
 export const ENEMY_DATA = [
-  // 一般魔物 (全面強化血量、移速與攻擊壓迫感)
+  // 一般魔物 (大幅下調血量、移速與傷害，保持割草爽感)
   {
     id: "e_01",
     name: "腐化史萊姆",
-    stats: { maxHp: 52, speed: 56, damage: 15, expReward: 1, knockbackResist: 0.2 },
+    stats: { maxHp: 34, speed: 48, damage: 9, expReward: 1, knockbackResist: 0.15 },
     color: "#84cc16",
     size: 24,
     isBoss: false,
@@ -227,7 +227,7 @@ export const ENEMY_DATA = [
   {
     id: "e_02",
     name: "狂暴蝙蝠",
-    stats: { maxHp: 34, speed: 122, damage: 17, expReward: 2, knockbackResist: 0.05 },
+    stats: { maxHp: 22, speed: 102, damage: 11, expReward: 2, knockbackResist: 0.0 },
     color: "#ec4899",
     size: 20,
     isBoss: false,
@@ -236,7 +236,7 @@ export const ENEMY_DATA = [
   {
     id: "e_04",
     name: "深淵魔蛛",
-    stats: { maxHp: 98, speed: 86, damage: 22, expReward: 3, knockbackResist: 0.4 },
+    stats: { maxHp: 62, speed: 72, damage: 14, expReward: 3, knockbackResist: 0.3 },
     color: "#7c3aed",
     size: 26,
     isBoss: false,
@@ -247,7 +247,7 @@ export const ENEMY_DATA = [
     id: "e_goblin",
     name: "💰 貪婪黃金哥布林",
     subtitle: "限時 14 秒集火擊殺！爆出大量金幣與磁鐵！",
-    stats: { maxHp: 780, speed: 124, damage: 0, expReward: 18, knockbackResist: 0.75 },
+    stats: { maxHp: 620, speed: 116, damage: 0, expReward: 18, knockbackResist: 0.7 },
     color: "#facc15",
     size: 32,
     isBoss: false,
@@ -258,7 +258,7 @@ export const ENEMY_DATA = [
   {
     id: "e_egg",
     name: "劇毒魔蛛卵囊",
-    stats: { maxHp: 720, speed: 0, damage: 0, expReward: 8, knockbackResist: 1.0 },
+    stats: { maxHp: 500, speed: 0, damage: 0, expReward: 8, knockbackResist: 1.0 },
     color: "#a855f7",
     size: 36,
     isBoss: false,
@@ -268,19 +268,19 @@ export const ENEMY_DATA = [
   {
     id: "e_spider_bomb",
     name: "菁英自爆魔蛛",
-    stats: { maxHp: 185, speed: 145, damage: 38, expReward: 5, knockbackResist: 0.45 },
+    stats: { maxHp: 110, speed: 125, damage: 24, expReward: 5, knockbackResist: 0.4 },
     color: "#e879f9",
     size: 24,
     isBoss: false,
     isElite: false
   },
 
-  // ⚔️ 逢 5 特色小 Boss (Wave 5 / 15 / 25 — 強度與壓迫感升級)
+  // ⚔️ 逢 5 特色小 Boss (Wave 5 / 15 / 25)
   {
     id: "mb_05",
     name: "【小Boss】骸骨暴徒隊長",
     subtitle: "蠻牛衝鋒 & 碎骨旋風錘",
-    stats: { maxHp: 2600, speed: 62, damage: 36, expReward: 32, knockbackResist: 0.9 },
+    stats: { maxHp: 1900, speed: 54, damage: 26, expReward: 32, knockbackResist: 0.88 },
     color: "#dc2626",
     size: 62,
     isBoss: false,
@@ -291,7 +291,7 @@ export const ENEMY_DATA = [
     id: "mb_15",
     name: "【小Boss】發條處刑者",
     subtitle: "紅線狙擊雷射 & 高爆定時炸彈",
-    stats: { maxHp: 7800, speed: 58, damage: 48, expReward: 50, knockbackResist: 0.92 },
+    stats: { maxHp: 5200, speed: 50, damage: 34, expReward: 50, knockbackResist: 0.9 },
     color: "#f59e0b",
     size: 66,
     isBoss: false,
@@ -302,7 +302,7 @@ export const ENEMY_DATA = [
     id: "mb_25",
     name: "【小Boss】深淵雙子刺客",
     subtitle: "高速瞬步 & 交叉 X 型次元斬",
-    stats: { maxHp: 15000, speed: 104, damage: 60, expReward: 70, knockbackResist: 0.88 },
+    stats: { maxHp: 9200, speed: 92, damage: 42, expReward: 70, knockbackResist: 0.85 },
     color: "#c084fc",
     size: 60,
     isBoss: false,
@@ -318,7 +318,7 @@ export const ENEMY_DATA = [
     waveTier: 10,
     name: "【Wave 10 君王】煉獄熔岩巨像・伊格尼斯",
     subtitle: "地脈內外環震爆 / 熔岩流星火雨 / 烈焰蠻牛衝鋒",
-    stats: { maxHp: 21000, speed: 56, damage: 54, expReward: 120, knockbackResist: 0.98 },
+    stats: { maxHp: 17500, speed: 52, damage: 45, expReward: 120, knockbackResist: 0.98 },
     color: "#ea580c",
     size: 98,
     isBoss: true,
@@ -329,7 +329,7 @@ export const ENEMY_DATA = [
     waveTier: 10,
     name: "【Wave 10 君王】永冬冰霜暴君・波瑞亞斯",
     subtitle: "極凍內外環冰爆 / 雙螺旋寒冰利刃 / 雪崩破冰連衝",
-    stats: { maxHp: 20500, speed: 60, damage: 52, expReward: 120, knockbackResist: 0.98 },
+    stats: { maxHp: 17000, speed: 55, damage: 44, expReward: 120, knockbackResist: 0.98 },
     color: "#38bdf8",
     size: 96,
     isBoss: true,
@@ -340,7 +340,7 @@ export const ENEMY_DATA = [
     waveTier: 10,
     name: "【Wave 10 君王】腐化世界古樹・尤格拉希爾",
     subtitle: "旋轉荊棘死光 / 劇毒孢子沼澤雨 / 地脈根鬚黑洞",
-    stats: { maxHp: 23000, speed: 50, damage: 52, expReward: 120, knockbackResist: 0.99 },
+    stats: { maxHp: 19000, speed: 46, damage: 44, expReward: 120, knockbackResist: 0.99 },
     color: "#22c55e",
     size: 102,
     isBoss: true,
@@ -355,7 +355,7 @@ export const ENEMY_DATA = [
     waveTier: 20,
     name: "【Wave 20 女皇】深淵織網女皇・阿拉克涅",
     subtitle: "四軌螺旋毒彈幕 / 緩速束縛蛛網 / 劇毒卵囊孵化",
-    stats: { maxHp: 68000, speed: 62, damage: 66, expReward: 220, knockbackResist: 0.98 },
+    stats: { maxHp: 56000, speed: 56, damage: 56, expReward: 220, knockbackResist: 0.98 },
     color: "#9333ea",
     size: 102,
     isBoss: true,
@@ -366,7 +366,7 @@ export const ENEMY_DATA = [
     waveTier: 20,
     name: "【Wave 20 帝皇】殲滅機械帝皇・奧米茄零式",
     subtitle: "十字軌道旋轉雷射 / 地毯式凝固汽油轟炸 / 超載電磁砲連狙",
-    stats: { maxHp: 72000, speed: 58, damage: 70, expReward: 220, knockbackResist: 0.99 },
+    stats: { maxHp: 59000, speed: 54, damage: 60, expReward: 220, knockbackResist: 0.99 },
     color: "#f59e0b",
     size: 104,
     isBoss: true,
@@ -377,7 +377,7 @@ export const ENEMY_DATA = [
     waveTier: 20,
     name: "【Wave 20 真祖】鮮血緋紅真祖・德古拉",
     subtitle: "腥紅血月內外環 / 血蝠瞬移奇襲牆 / 真祖魔劍螺旋風暴",
-    stats: { maxHp: 65000, speed: 70, damage: 68, expReward: 220, knockbackResist: 0.97 },
+    stats: { maxHp: 54000, speed: 64, damage: 58, expReward: 220, knockbackResist: 0.97 },
     color: "#e11d48",
     size: 98,
     isBoss: true,
@@ -392,7 +392,7 @@ export const ENEMY_DATA = [
     waveTier: 30,
     name: "【Wave 30 終焉】虛空死靈大君・瑪爾扎哈",
     subtitle: "八向旋轉滅世死光 / 亡靈鐵騎彈幕牆 / 靈魂虹吸黑洞",
-    stats: { maxHp: 198000, speed: 60, damage: 84, expReward: 420, knockbackResist: 0.99 },
+    stats: { maxHp: 165000, speed: 55, damage: 72, expReward: 420, knockbackResist: 0.99 },
     color: "#ec4899",
     size: 110,
     isBoss: true,
@@ -403,7 +403,7 @@ export const ENEMY_DATA = [
     waveTier: 30,
     name: "【Wave 30 終焉】滅世混沌古龍・巴哈姆特",
     subtitle: "焦土旋轉龍息 / 天災龍炎隕石雨 / 神龍俯衝與混沌引力核",
-    stats: { maxHp: 218000, speed: 64, damage: 88, expReward: 420, knockbackResist: 0.99 },
+    stats: { maxHp: 180000, speed: 58, damage: 76, expReward: 420, knockbackResist: 0.99 },
     color: "#f97316",
     size: 116,
     isBoss: true,
@@ -414,7 +414,7 @@ export const ENEMY_DATA = [
     waveTier: 30,
     name: "【Wave 30 終焉】墮落六翼熾天使・路西法",
     subtitle: "聖魔八芒裁決死光 / 墮天光羽彈幕海 / 創世奇點黑洞與聖槍牆",
-    stats: { maxHp: 204000, speed: 66, damage: 86, expReward: 420, knockbackResist: 0.99 },
+    stats: { maxHp: 170000, speed: 60, damage: 74, expReward: 420, knockbackResist: 0.99 },
     color: "#facc15",
     size: 112,
     isBoss: true,

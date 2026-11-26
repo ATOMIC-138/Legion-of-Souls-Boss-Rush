@@ -1,6 +1,6 @@
-import { MINION_DATA, MYTHIC_RECIPES, BOSS_CHEST_REWARDS } from "./data.js?v=11";
-import { Minion } from "./minion.js?v=11";
-import { SpriteRenderer } from "./spriteRenderer.js?v=11";
+import { MINION_DATA, MYTHIC_RECIPES, BOSS_CHEST_REWARDS } from "./data.js?v=12";
+import { Minion } from "./minion.js?v=12";
+import { SpriteRenderer } from "./spriteRenderer.js?v=12";
 
 /**
  * 升級抽卡、Reroll 刷新、三合一升星、★★★★ 神話跨種族融合 與 首領寶箱獎勵管理器 (LevelUpManager)

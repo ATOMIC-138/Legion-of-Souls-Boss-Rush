@@ -1,22 +1,22 @@
-import { WORLD_CONFIG, MINION_DATA, MYTHIC_RECIPES } from "./data.js?v=11";
-import { InputHandler } from "./input.js?v=11";
-import { Player } from "./player.js?v=11";
-import { ObjectPool } from "./pool.js?v=11";
-import { Quadtree } from "./quadtree.js?v=11";
-import { Enemy } from "./enemy.js?v=11";
-import { WaveManager } from "./waveManager.js?v=11";
-import { Minion } from "./minion.js?v=11";
-import { ProjectileManager } from "./projectile.js?v=11";
-import { ItemManager } from "./item.js?v=11";
-import { LevelUpManager } from "./levelUpManager.js?v=11";
-import { SynergyManager } from "./synergyManager.js?v=11";
-import { VFXManager } from "./vfx.js?v=11";
-import { SpriteRenderer } from "./spriteRenderer.js?v=11";
-import { SoundManager } from "./soundManager.js?v=11";
-import { MetaProgressionManager } from "./metaManager.js?v=11";
-import { BossHazardManager } from "./bossHazardManager.js?v=11";
-import { ArenaRenderer } from "./arenaRenderer.js?v=11";
-import { ShrineManager } from "./shrineManager.js?v=11";
+import { WORLD_CONFIG, MINION_DATA, MYTHIC_RECIPES } from "./data.js?v=12";
+import { InputHandler } from "./input.js?v=12";
+import { Player } from "./player.js?v=12";
+import { ObjectPool } from "./pool.js?v=12";
+import { Quadtree } from "./quadtree.js?v=12";
+import { Enemy } from "./enemy.js?v=12";
+import { WaveManager } from "./waveManager.js?v=12";
+import { Minion } from "./minion.js?v=12";
+import { ProjectileManager } from "./projectile.js?v=12";
+import { ItemManager } from "./item.js?v=12";
+import { LevelUpManager } from "./levelUpManager.js?v=12";
+import { SynergyManager } from "./synergyManager.js?v=12";
+import { VFXManager } from "./vfx.js?v=12";
+import { SpriteRenderer } from "./spriteRenderer.js?v=12";
+import { SoundManager } from "./soundManager.js?v=12";
+import { MetaProgressionManager } from "./metaManager.js?v=12";
+import { BossHazardManager } from "./bossHazardManager.js?v=12";
+import { ArenaRenderer } from "./arenaRenderer.js?v=12";
+import { ShrineManager } from "./shrineManager.js?v=12";
 
 /**
  * 遊戲主控制器 (Game Engine - 終極完整版)
@@ -359,10 +359,10 @@ class Game {
 
   triggerLevelUp() {
     this.player.level += 1;
-    // 無上限平滑二次成長經驗曲線：前期節奏明快，後期穩定收斂在 Lv.33~40（約可湊出 3~4 隻 ★3 並融合 ★★★★ 神話）
+    // 無上限平滑二次成長經驗曲線 (小幅下調約 18%，節奏流暢且後期穩定養出 3~4 隻 ★3 與 ★4 神話)
     const lv = this.player.level;
     this.player.expToNextLevel = Math.round(
-      10 + (lv - 1) * 3.5 + Math.pow(lv - 1, 2) * 0.21
+      8 + (lv - 1) * 3.0 + Math.pow(lv - 1, 2) * 0.16
     );
     this.soundManager.playLevelUp();
     this.vfx.spawnShockwave(this.player.x, this.player.y, 95, "#38bdf8", 0.4);
