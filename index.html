@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>召喚師割草生存</title>
+  <link rel="stylesheet" href="css/style.css?v=8">
+</head>
+<body>
+  <div id="game-container">
+    <!-- 遊戲畫布 -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Boss / 聖壇 / 哥布林 全螢幕動態橫幅 -->
+    <div id="boss-alert-banner" class="boss-alert hidden">
+      <div class="boss-alert-inner">
+        ⚠️ WARNING：傳說君王已降臨戰場！小心紅圈與衝鋒預警！ ⚠️
+      </div>
+    </div>
+
+    <!-- 頂部與四周 HUD 狀態列 -->
+    <div id="hud-overlay">
+      <div class="hud-top">
+        <div class="hud-left">
+          <div class="stat-bar hp-bar-container">
+            <span class="bar-label">HP</span>
+            <div class="bar-bg">
+              <div id="hp-bar-fill" class="bar-fill"></div>
+            </div>
+            <span id="hp-text" class="bar-value">100 / 100</span>
+          </div>
+          <div class="stat-bar exp-bar-container">
+            <span class="bar-label">LV.<span id="level-text">1</span></span>
+            <div class="bar-bg">
+              <div id="exp-bar-fill" class="bar-fill"></div>
+            </div>
+            <span id="exp-text" class="bar-value">0 / 8</span>
+          </div>
+          <!-- 左上角傳說遺物裝備欄 -->
+          <div id="relic-inventory-bar" class="relic-bar">
+            <span class="relic-empty-hint">📦 尚未裝備遺物</span>
+          </div>
+        </div>
+
+        <div class="hud-center">
+          <div class="wave-timer-row">
+            <div id="wave-badge" class="wave-pill">WAVE 1 / 30</div>
+            <div id="timer-display">00:00</div>
+          </div>
+          <div id="step-badge">💀 擊殺數: <b id="kill-count-text">0</b></div>
+
+          <!-- 專屬傳說大 Boss 巨型血條與技能提示 -->
+          <div id="boss-hud-panel" class="boss-hud hidden">
+            <div class="boss-hud-header">
+              <span id="boss-hud-name" class="boss-name"></span>
+              <span id="boss-hud-hp-text" class="boss-hp-val"></span>
+            </div>
+            <div class="boss-bar-bg">
+              <div id="boss-hud-bar-fill" class="boss-bar-fill"></div>
+            </div>
+            <div id="boss-hud-skill" class="boss-skill-cast"></div>
+          </div>
+        </div>
+
+        <div class="hud-right">
+          <div class="battle-status-panel">
+            <div class="status-pill">⚔️ 隨從數: <span id="minion-count-text">0</span></div>
+            <button id="mute-toggle-btn" type="button" class="hud-icon-btn" title="切換音樂與音效 (M)">
+              <span id="mute-status-text">🔊 音效開</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 左側全局羈絆面板 -->
+      <div id="synergy-panel" class="side-panel">
+        <div class="panel-title">全局羈絆</div>
+        <div id="synergy-list" class="panel-content">
+          <div class="empty-hint">尚無啟動羈絆</div>
+        </div>
+      </div>
+
+      <!-- 底部主角主動技能與隨從陣型冷卻槽 -->
+      <div class="hud-bottom-group">
+        <div class="active-skills-bar">
+          <div id="skill-dash-box" class="skill-slot ready">
+            <div class="skill-key">空白鍵 Space</div>
+            <div class="skill-icon">⚡</div>
+            <div class="skill-info">
+              <div class="skill-name">奧術閃現</div>
+              <div id="dash-cd-text" class="skill-cd">就緒 READY</div>
+            </div>
+          </div>
+          <div id="skill-cmd-box" class="skill-slot ready">
+            <div class="skill-key">E 鍵 / 右鍵</div>
+            <div class="skill-icon">📯</div>
+            <div class="skill-info">
+              <div class="skill-name">狂暴集火號角</div>
+              <div id="cmd-cd-text" class="skill-cd">就緒 READY</div>
+            </div>
+          </div>
+          <div id="skill-stance-box" class="skill-slot ready" style="pointer-events: auto; cursor: pointer;" title="點擊或按 R 鍵切換隨從陣型">
+            <div class="skill-key">R 鍵 / Tab</div>
+            <div id="stance-icon" class="skill-icon">⚔️</div>
+            <div class="skill-info">
+              <div id="stance-name" class="skill-name">自由狩獵陣</div>
+              <div id="stance-desc" class="skill-cd">主動索敵 (傷害+15%)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-bottom">
+          <span><b>WASD</b> 移動 | <b>空白鍵</b> 奧術閃現 | <b>E / 右鍵</b> 集火號角 | <b>R / Tab</b> 切換陣型 | <b>M</b> 靜音</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 升級三選一抽卡、★★★★ 神話融合 & 首領寶箱 Modal -->
+    <dialog id="levelup-modal" class="game-modal" closedby="none" aria-labelledby="levelup-modal-title">
+      <div class="modal-content">
+        <h2 id="levelup-modal-title" class="modal-title">✨ 召喚師升級！選擇你的隨從 ✨</h2>
+        <p id="levelup-modal-subtitle" class="modal-subtitle">湊齊 3 隻同星隨從自動升星；兩隻 ★3 可觸發 ★★★★ 神話融合！</p>
+        <div id="card-choices" class="card-grid"></div>
+        <div class="modal-footer">
+          <button id="reroll-btn" type="button" class="reroll-btn">
+            🎲 命運重骰刷新卡片 (剩餘 <span id="reroll-count">1</span> 次)
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- 📖 魔導圖鑑系統 Modal (Bestiary / Codex) -->
+    <dialog id="codex-modal" class="game-modal codex-modal" aria-labelledby="codex-modal-title">
+      <div class="modal-content">
+        <div class="codex-header-row">
+          <h2 id="codex-modal-title" class="modal-title">📖 皇家魔導圖鑑與神話合成配方便覽</h2>
+          <button id="close-codex-btn" type="button" class="codex-close-btn">✕ 關閉</button>
+        </div>
+        <div class="codex-tabs">
+          <button type="button" class="codex-tab-btn active" data-codex-tab="minions">🌟 隨從與 ★3 覺醒技</button>
+          <button type="button" class="codex-tab-btn" data-codex-tab="mythic">🌈 ★★★★ 神話超進化配方</button>
+          <button type="button" class="codex-tab-btn" data-codex-tab="synergies">🔗 10 大全局羈絆</button>
+          <button type="button" class="codex-tab-btn" data-codex-tab="bosses">👑 首領討伐名錄</button>
+        </div>
+        <div id="codex-body-content" class="codex-body"></div>
+      </div>
+    </dialog>
+
+    <!-- 勝敗結算與隨從 DPS 傷害排行榜 Modal -->
+    <dialog id="gameover-modal" class="game-modal summary-modal" closedby="none" aria-labelledby="summary-title">
+      <div class="modal-content">
+        <h2 id="summary-title" class="modal-title">🏆 戰役結算報告 🏆</h2>
+        <p id="summary-subtitle" class="modal-subtitle">你率領魔物大軍奮戰到了最後一刻！</p>
+
+        <div class="summary-stats-row">
+          <div class="sum-stat-box">
+            <div class="sum-stat-label">存活波次 / 時間</div>
+            <div id="sum-time" class="sum-stat-val">Wave 1</div>
+          </div>
+          <div class="sum-stat-box">
+            <div class="sum-stat-label">總擊殺魔物</div>
+            <div id="sum-kills" class="sum-stat-val">0</div>
+          </div>
+          <div class="sum-stat-box">
+            <div class="sum-stat-label">召喚師等級</div>
+            <div id="sum-level" class="sum-stat-val">Lv.1</div>
+          </div>
+          <div class="sum-stat-box gold">
+            <div class="sum-stat-label">獲得賞金</div>
+            <div id="sum-gold" class="sum-stat-val">+0 💰</div>
+          </div>
+        </div>
+
+        <div class="dps-board-box">
+          <div class="dps-board-title">📊 傷害輸出 (DPS) 排行榜</div>
+          <div id="dps-leaderboard" class="dps-list"></div>
+        </div>
+
+        <div class="summary-actions">
+          <button id="restart-now-btn" type="button" class="start-btn" autofocus>
+            🔄 再戰一局
+          </button>
+          <button id="back-to-title-btn" type="button" class="reroll-btn">
+            🏰 返回主畫面
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- 遊戲開始主畫面 -->
+    <div id="start-screen" class="start-overlay">
+      <div class="start-card">
+        <div class="title-badge">SUMMONER SURVIVOR</div>
+        <h1 class="game-title">召喚師割草生存</h1>
+        <p class="game-desc">
+          組建魔物軍團迎戰 30 波大軍與隨機君王首領！<br>
+          湊齊 3 隻自動升星，<b>★3 解鎖覺醒大招</b>，更能融合 <b>★★★★ 神話泰坦</b>。
+        </p>
+
+        <!-- 升星體型與特效預覽展示區 -->
+        <div class="showcase-box">
+          <div class="showcase-title">⭐ 升星進化與神話融合預覽</div>
+          <canvas id="start-preview-canvas" width="520" height="105"></canvas>
+          <div class="showcase-labels">
+            <span><b>★1 基礎</b></span>
+            <span><b>★★2 菁英巨化</b></span>
+            <span><b>★★★3 覺醒大招</b></span>
+            <span style="color:#e879f9;"><b>★★★★ 神話泰坦</b></span>
+          </div>
+        </div>
+
+        <!-- 局外永久天賦 & 主角傳說造型商場 -->
+        <div class="meta-shop-box">
+          <div class="meta-shop-header">
+            <div class="shop-tabs">
+              <button id="shop-tab-upgrades" type="button" class="shop-tab-btn active">⚔️ 永久天賦強化</button>
+              <button id="shop-tab-skins" type="button" class="shop-tab-btn">👑 主角傳說造型</button>
+            </div>
+            <span class="meta-gold-pill">持有金幣: <b id="meta-gold-amount">0</b> 💰</span>
+          </div>
+          <div id="meta-shop-grid" class="meta-shop-grid"></div>
+        </div>
+
+        <div class="start-btn-row">
+          <button id="open-codex-btn" type="button" class="reroll-btn codex-open-btn">
+            📖 魔導圖鑑
+          </button>
+          <button id="start-game-btn" type="button" class="start-btn" autofocus>
+            ⚔️ 開始遊戲
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js?v=8"></script>
+</body>
+</html>
