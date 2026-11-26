@@ -1,0 +1,1279 @@
+:root {
+  --bg-dark: #0d1117;
+  --panel-bg: rgba(22, 27, 34, 0.85);
+  --border-color: rgba(240, 246, 252, 0.15);
+  --text-main: #e6edf3;
+  --text-muted: #8b949e;
+  --hp-color: #ff4d4f;
+  --exp-color: #3b82f6;
+  --accent-gold: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+  color: var(--text-main);
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* HUD Overlay */
+#hud-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.hud-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.hud-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 280px;
+  background: var(--panel-bg);
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(6px);
+}
+
+.stat-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 48px;
+}
+
+.bar-bg {
+  flex: 1;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bar-fill {
+  height: 100%;
+  width: 100%;
+  transition: width 0.15s ease-out;
+}
+
+#hp-bar-fill {
+  background: linear-gradient(90deg, #dc2626, #f87171);
+}
+
+#exp-bar-fill {
+  width: 0%;
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+}
+
+.bar-value {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 65px;
+  text-align: right;
+  color: var(--text-muted);
+}
+
+.hud-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.wave-timer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wave-pill {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #fde047;
+  background: linear-gradient(90deg, rgba(180, 83, 9, 0.85), rgba(146, 64, 14, 0.9));
+  border: 1.5px solid #facc15;
+  padding: 6px 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+/* 專屬大 Boss 巨型頂部血條與技能蓄力提示 */
+.boss-hud {
+  margin-top: 4px;
+  width: 520px;
+  max-width: 90vw;
+  background: rgba(15, 23, 42, 0.92);
+  border: 2px solid #f43f5e;
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 0 28px rgba(244, 63, 94, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+.boss-hud.hidden {
+  display: none;
+}
+
+.boss-hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.boss-name {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #fda4af;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+.boss-hp-val {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fef08a;
+  font-variant-numeric: tabular-nums;
+}
+
+.boss-bar-bg {
+  width: 100%;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.boss-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #be123c, #f43f5e, #fb923c);
+  transition: width 0.12s ease-out;
+}
+
+.boss-skill-cast {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fde047;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+#timer-display {
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  background: var(--panel-bg);
+  padding: 4px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+#step-badge {
+  font-size: 0.8rem;
+  color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.hud-right {
+  display: flex;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+
+.battle-status-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel-bg);
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  backdrop-filter: blur(6px);
+}
+
+.status-pill span {
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.hud-icon-btn {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-main);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.hud-icon-btn:hover {
+  background: rgba(51, 65, 85, 0.95);
+  border-color: var(--accent-gold);
+}
+
+.side-panel {
+  align-self: flex-start;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 12px;
+  width: 268px;
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+  pointer-events: auto;
+  backdrop-filter: blur(6px);
+}
+
+.side-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.side-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.panel-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+}
+
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.synergy-item {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 10px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.synergy-item.tier-1 {
+  border-color: rgba(59, 130, 246, 0.6);
+  background: rgba(30, 58, 138, 0.28);
+}
+
+.synergy-item.tier-2 {
+  border-color: rgba(245, 158, 11, 0.85);
+  background: rgba(120, 53, 15, 0.35);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+
+.synergy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.synergy-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.synergy-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent-gold);
+}
+
+.synergy-desc {
+  font-size: 0.74rem;
+  color: rgba(139, 148, 158, 0.65);
+  line-height: 1.35;
+}
+
+.synergy-desc.active {
+  color: #fde047;
+  font-weight: 600;
+}
+
+.other-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.sub-tag-badge {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
+.empty-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.hud-bottom {
+  align-self: center;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.hud-bottom b {
+  color: var(--text-main);
+}
+
+/* Modal Dialog */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.game-modal {
+  margin: auto;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.96);
+  color: var(--text-main);
+  padding: 28px;
+  max-width: 820px;
+  width: 92%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+}
+
+.game-modal::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(5px);
+}
+
+.modal-title {
+  text-align: center;
+  color: var(--accent-gold);
+  margin-bottom: 6px;
+  font-size: 1.5rem;
+}
+
+.modal-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 22px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* 三選一隨從卡片樣式 */
+.minion-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 18px 16px;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+  font-family: inherit;
+}
+
+.minion-card:hover,
+.minion-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: var(--accent-gold);
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.25);
+  outline: none;
+}
+
+.minion-card.merge-ready {
+  border-color: #facc15;
+  background: linear-gradient(180deg, rgba(66, 32, 6, 0.55), rgba(30, 41, 59, 0.95));
+  box-shadow: 0 0 18px rgba(250, 204, 21, 0.3);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-portrait {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.25), rgba(15, 23, 42, 0.9));
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.card-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.card-type {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(96, 165, 250, 0.45);
+  color: #93c5fd;
+}
+
+.card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.65);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.card-stats b {
+  color: var(--text-main);
+}
+
+.owned-info {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding-top: 4px;
+}
+
+.merge-banner {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fde047;
+  background: rgba(234, 179, 8, 0.2);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.merge-banner.super {
+  color: #fda4af;
+  background: rgba(225, 29, 72, 0.25);
+  border-color: #f43f5e;
+}
+
+/* 遊戲開始主畫面 (Start Screen Overlay) */
+.start-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.78), rgba(3, 7, 18, 0.94));
+  backdrop-filter: blur(8px);
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.start-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.start-card {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+  border: 1.5px solid rgba(245, 158, 11, 0.55);
+  border-radius: 20px;
+  padding: 32px 36px;
+  max-width: 640px;
+  width: 92%;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(245, 158, 11, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.title-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 4px 14px;
+  border-radius: 999px;
+}
+
+.game-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #fde047, #f59e0b, #fb7185);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 18px rgba(245, 158, 11, 0.25);
+}
+
+.game-desc {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.game-desc b {
+  color: var(--text-main);
+}
+
+.showcase-box {
+  width: 100%;
+  background: rgba(9, 13, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.showcase-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fde047;
+  margin-bottom: 6px;
+}
+
+#start-preview-canvas {
+  display: block;
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.showcase-labels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.showcase-labels b {
+  color: var(--text-main);
+  display: block;
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.guide-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+.guide-icon {
+  font-size: 1.5rem;
+}
+
+.guide-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.guide-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.start-btn {
+  margin-top: 6px;
+  padding: 14px 42px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #090d16;
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+}
+
+.start-btn:hover,
+.start-btn:focus-visible {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.65);
+  outline: none;
+}
+
+/* 底部主動技能列 (Dash & Command Horn) */
+.hud-bottom-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.active-skills-bar {
+  display: flex;
+  gap: 14px;
+}
+
+.skill-slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel-bg);
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  border-radius: 12px;
+  padding: 6px 14px;
+  min-width: 175px;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.2s, opacity 0.2s;
+}
+
+.skill-slot.ready {
+  border-color: #facc15;
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.22);
+}
+
+.skill-slot.cooling {
+  opacity: 0.72;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.skill-key {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #fde047;
+}
+
+.skill-icon {
+  font-size: 1.35rem;
+}
+
+.skill-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.skill-cd {
+  font-size: 0.72rem;
+  color: #34d399;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Boss 登場紅光警報橫幅 */
+.boss-alert {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  background: linear-gradient(90deg, rgba(185, 28, 28, 0.92), rgba(220, 38, 38, 0.96), rgba(185, 28, 28, 0.92));
+  border: 2px solid #fca5a5;
+  border-radius: 999px;
+  padding: 10px 32px;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.85);
+  animation: pulseAlert 0.6s infinite alternate;
+  pointer-events: none;
+}
+
+.boss-alert.hidden {
+  display: none;
+}
+
+.boss-alert-inner {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1.5px;
+}
+
+@keyframes pulseAlert {
+  from { transform: translateX(-50%) scale(0.97); }
+  to { transform: translateX(-50%) scale(1.03); }
+}
+
+/* 卡片專屬技能描述與首領寶箱圖示 */
+.card-skill-desc {
+  font-size: 0.78rem;
+  color: #fde047;
+  background: rgba(250, 204, 21, 0.08);
+  border-left: 3px solid #facc15;
+  padding: 5px 8px;
+  border-radius: 4px;
+  line-height: 1.35;
+}
+
+.chest-reward-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.2);
+  border: 1.5px solid #facc15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.modal-footer {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.reroll-btn {
+  padding: 10px 24px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  background: rgba(51, 65, 85, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  font-family: inherit;
+}
+
+.reroll-btn:hover:not(:disabled) {
+  background: rgba(71, 85, 105, 1);
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+
+/* 局外永久天賦商店 */
+.meta-shop-box {
+  width: 100%;
+  background: rgba(9, 13, 22, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.meta-shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+.meta-gold-pill {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  color: #fde047;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.meta-shop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.meta-upgrade-card {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-up-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.meta-up-lv {
+  color: #fde047;
+}
+
+.meta-up-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.meta-buy-btn {
+  margin-top: 4px;
+  padding: 5px 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  background: rgba(234, 179, 8, 0.2);
+  color: #fde047;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.meta-buy-btn:hover:not(:disabled) {
+  background: rgba(234, 179, 8, 0.38);
+}
+
+.meta-buy-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 結算面板與 DPS 傷害排行榜 */
+.summary-modal {
+  max-width: 680px;
+}
+
+.summary-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.sum-stat-box {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.sum-stat-box.gold {
+  border-color: rgba(250, 204, 21, 0.5);
+  background: rgba(120, 53, 15, 0.35);
+}
+
+.sum-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sum-stat-val {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.dps-board-box {
+  background: rgba(9, 13, 22, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 20px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.dps-board-title {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #fde047;
+  margin-bottom: 10px;
+}
+
+.dps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dps-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dps-row-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.dps-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dps-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.summary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* 左上角遺物裝備欄 (Relic Inventory HUD) */
+.relic-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
+}
+
+.relic-empty-hint {
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.75);
+}
+
+.relic-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(30, 41, 59, 0.92);
+  border: 1px solid rgba(250, 204, 21, 0.55);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fef08a;
+  cursor: help;
+}
+
+.relic-stack {
+  background: #f59e0b;
+  color: #0f172a;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+/* 抽卡 ★3 覺醒大招預覽框 & ★★★★ 神話超進化融合卡 */
+.card-ult-box {
+  background: rgba(88, 28, 135, 0.32);
+  border: 1px solid rgba(192, 132, 252, 0.45);
+  border-radius: 8px;
+  padding: 7px 9px;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.ult-title {
+  font-weight: 800;
+  color: #fde047;
+  margin-bottom: 2px;
+}
+
+.ult-desc {
+  color: #e9d5ff;
+}
+
+.minion-card.mythic-fusion-card {
+  border: 2px solid #e879f9;
+  background: linear-gradient(160deg, rgba(88, 28, 135, 0.75), rgba(124, 45, 18, 0.7), rgba(15, 23, 42, 0.96));
+  box-shadow: 0 0 26px rgba(232, 121, 249, 0.55);
+}
+
+.merge-banner.mythic {
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.4), rgba(245, 158, 11, 0.4));
+  border-color: #e879f9;
+  color: #fef08a;
+}
+
+/* 局外天賦 & 主角傳說造型商場分頁 */
+.shop-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.shop-tab-btn {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.shop-tab-btn.active {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #facc15;
+  color: #fde047;
+}
+
+.skin-card.equipped-skin {
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+}
+
+.skin-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skin-preview-canvas {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  flex-shrink: 0;
+}
+
+.skin-bonus-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #4ade80;
+  margin-top: 2px;
+}
+
+.meta-buy-btn.equipped {
+  background: linear-gradient(90deg, #0284c7, #2563eb);
+  color: #ffffff;
+}
+
+.start-btn-row {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  justify-content: center;
+}
+
+.codex-open-btn {
+  padding: 13px 22px;
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+/* 📖 魔導圖鑑系統 Modal */
+.codex-modal {
+  max-width: 900px;
+}
+
+.codex-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.codex-close-btn {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.codex-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.codex-tab-btn {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-muted);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.codex-tab-btn.active {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #facc15;
+  color: #fde047;
+}
+
+.codex-body {
+  max-height: 410px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.codex-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.codex-card {
+  background: rgba(30, 41, 59, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.codex-card.mythic-border {
+  border-color: #e879f9;
+  background: linear-gradient(145deg, rgba(88, 28, 135, 0.45), rgba(30, 41, 59, 0.92));
+}
+
+.codex-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.codex-canvas {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.codex-title {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.codex-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.codex-desc {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.codex-ult-box {
+  background: rgba(15, 23, 42, 0.75);
+  border-left: 3px solid #facc15;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: #fef08a;
+  line-height: 1.4;
+}
+
