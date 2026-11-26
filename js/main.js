@@ -1,22 +1,22 @@
-import { WORLD_CONFIG, MINION_DATA, MYTHIC_RECIPES } from "./data.js?v=10";
-import { InputHandler } from "./input.js?v=10";
-import { Player } from "./player.js?v=10";
-import { ObjectPool } from "./pool.js?v=10";
-import { Quadtree } from "./quadtree.js?v=10";
-import { Enemy } from "./enemy.js?v=10";
-import { WaveManager } from "./waveManager.js?v=10";
-import { Minion } from "./minion.js?v=10";
-import { ProjectileManager } from "./projectile.js?v=10";
-import { ItemManager } from "./item.js?v=10";
-import { LevelUpManager } from "./levelUpManager.js?v=10";
-import { SynergyManager } from "./synergyManager.js?v=10";
-import { VFXManager } from "./vfx.js?v=10";
-import { SpriteRenderer } from "./spriteRenderer.js?v=10";
-import { SoundManager } from "./soundManager.js?v=10";
-import { MetaProgressionManager } from "./metaManager.js?v=10";
-import { BossHazardManager } from "./bossHazardManager.js?v=10";
-import { ArenaRenderer } from "./arenaRenderer.js?v=10";
-import { ShrineManager } from "./shrineManager.js?v=10";
+import { WORLD_CONFIG, MINION_DATA, MYTHIC_RECIPES } from "./data.js?v=11";
+import { InputHandler } from "./input.js?v=11";
+import { Player } from "./player.js?v=11";
+import { ObjectPool } from "./pool.js?v=11";
+import { Quadtree } from "./quadtree.js?v=11";
+import { Enemy } from "./enemy.js?v=11";
+import { WaveManager } from "./waveManager.js?v=11";
+import { Minion } from "./minion.js?v=11";
+import { ProjectileManager } from "./projectile.js?v=11";
+import { ItemManager } from "./item.js?v=11";
+import { LevelUpManager } from "./levelUpManager.js?v=11";
+import { SynergyManager } from "./synergyManager.js?v=11";
+import { VFXManager } from "./vfx.js?v=11";
+import { SpriteRenderer } from "./spriteRenderer.js?v=11";
+import { SoundManager } from "./soundManager.js?v=11";
+import { MetaProgressionManager } from "./metaManager.js?v=11";
+import { BossHazardManager } from "./bossHazardManager.js?v=11";
+import { ArenaRenderer } from "./arenaRenderer.js?v=11";
+import { ShrineManager } from "./shrineManager.js?v=11";
 
 /**
  * 遊戲主控制器 (Game Engine - 終極完整版)
@@ -359,14 +359,10 @@ class Game {
 
   triggerLevelUp() {
     this.player.level += 1;
-    // 平滑且具上限的升級經驗曲線：讓玩家在 30 波內可穩定升至 40~55 級，輕鬆體驗多隻 ★3 覺醒與 ★★★★ 神話泰坦！
-    this.player.expToNextLevel = Math.min(
-      140,
-      Math.round(
-        6 +
-          (this.player.level - 1) * 3.8 +
-          Math.pow(Math.max(0, this.player.level - 10), 1.35)
-      )
+    // 無上限平滑二次成長經驗曲線：前期節奏明快，後期穩定收斂在 Lv.33~40（約可湊出 3~4 隻 ★3 並融合 ★★★★ 神話）
+    const lv = this.player.level;
+    this.player.expToNextLevel = Math.round(
+      10 + (lv - 1) * 3.5 + Math.pow(lv - 1, 2) * 0.21
     );
     this.soundManager.playLevelUp();
     this.vfx.spawnShockwave(this.player.x, this.player.y, 95, "#38bdf8", 0.4);

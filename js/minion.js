@@ -1,4 +1,4 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=10";
+import { SpriteRenderer } from "./spriteRenderer.js?v=11";
 
 /**
  * Minion (隨從實體 - ★3 終極覺醒技 + ★★★★ 神話泰坦 + 陣型切換 + 單體破甲平衡版)

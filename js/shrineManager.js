@@ -1,4 +1,4 @@
-import { SHRINE_TYPES } from "./data.js?v=10";
+import { SHRINE_TYPES } from "./data.js?v=11";
 
 /**
  * 地圖隨機互動機關與「太古聖壇事件」管理器 (ShrineManager)

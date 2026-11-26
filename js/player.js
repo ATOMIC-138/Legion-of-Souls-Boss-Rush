@@ -1,5 +1,5 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=10";
-import { PLAYER_SKINS } from "./data.js?v=10";
+import { SpriteRenderer } from "./spriteRenderer.js?v=11";
+import { PLAYER_SKINS } from "./data.js?v=11";
 
 /**
  * Player (召喚師玩家實體 - 支援陣型切換、聖壇超載與傳說造型神兵)
@@ -81,10 +81,10 @@ export class Player {
     this.lifestealQuota = 5.0;
     this.lifestealResetTimer = 1.0;
 
-    // 等級與經驗值 (降低初始升級門檻，讓玩家能快速組建隨從軍團並合成多隻 ★3 與 ★4 神話)
+    // 等級與經驗值 (無上限平滑曲線起點)
     this.level = 1;
     this.currentExp = 0;
-    this.expToNextLevel = 6;
+    this.expToNextLevel = 10;
 
     // 受傷無敵幀 (秒) 與 蛛網緩速狀態
     this.invincibleDuration = 0.55;

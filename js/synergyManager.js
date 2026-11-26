@@ -1,4 +1,4 @@
-import { SYNERGY_RULES } from "./data.js?v=10";
+import { SYNERGY_RULES } from "./data.js?v=11";
 
 /**
  * 羈絆結算與遺物裝備欄管理器 (SynergyManager - 含左上角 Relic Inventory HUD)

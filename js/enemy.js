@@ -1,4 +1,4 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=10";
+import { SpriteRenderer } from "./spriteRenderer.js?v=11";
 
 /**
  * Enemy (敵人、特色小 Boss 與 9 大傳說君王大 Boss 完整 AI 控制器)
@@ -64,7 +64,7 @@ export class Enemy {
     this.lavaTrailTick = 0;
   }
 
-  init(template, x, y, hpScale = 1.0, dmgScale = 1.0) {
+  init(template, x, y, hpScale = 1.0, dmgScale = 1.0, speedScale = 1.0) {
     this.active = true;
     this.id = template.id;
     this.name = template.name;
@@ -83,7 +83,7 @@ export class Enemy {
 
     this.maxHp = Math.round(template.stats.maxHp * hpScale);
     this.hp = this.maxHp;
-    this.speed = template.stats.speed;
+    this.speed = Math.round(template.stats.speed * speedScale);
     this.damage = Math.round(template.stats.damage * dmgScale);
     this.expReward = template.stats.expReward;
     this.knockbackResist = template.stats.knockbackResist ?? 0;
