@@ -1,4 +1,4 @@
-# 召喚師割草生存（Legion of Souls: Boss Rush）
+# 星靈統帥（Legion of Souls: Boss Rush）
 
 一款使用 HTML5 Canvas 與原生 JavaScript 製作的 2D 俯視角生存遊戲。玩家扮演召喚師，一邊走位閃避攻擊，一邊招募並合成隨從迎戰 30 波敵人與首領。
 
