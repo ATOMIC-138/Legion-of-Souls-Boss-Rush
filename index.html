@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>召喚師割草生存</title>
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
   <div id="game-container">
@@ -34,7 +34,7 @@
             <div class="bar-bg">
               <div id="exp-bar-fill" class="bar-fill"></div>
             </div>
-            <span id="exp-text" class="bar-value">0 / 8</span>
+            <span id="exp-text" class="bar-value">0 / 6</span>
           </div>
           <!-- 左上角傳說遺物裝備欄 -->
           <div id="relic-inventory-bar" class="relic-bar">
@@ -72,9 +72,12 @@
         </div>
       </div>
 
-      <!-- 左側全局羈絆面板 -->
+      <!-- 左側全局羈絆面板 (半透明且可收合，不遮擋戰場視野) -->
       <div id="synergy-panel" class="side-panel">
-        <div class="panel-title">全局羈絆</div>
+        <div class="panel-title-row">
+          <span class="panel-title">全局羈絆</span>
+          <button id="synergy-toggle-btn" type="button" class="panel-collapse-btn" title="收合/展開羈絆面板">◀</button>
+        </div>
         <div id="synergy-list" class="panel-content">
           <div class="empty-hint">尚無啟動羈絆</div>
         </div>
@@ -233,6 +236,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/main.js?v=9"></script>
+  <script type="module" src="js/main.js?v=10"></script>
 </body>
 </html>
