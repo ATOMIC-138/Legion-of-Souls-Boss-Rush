@@ -1,4 +1,4 @@
-import { ENEMY_DATA, WORLD_CONFIG, WAVE_BOSS_POOLS } from "./data.js?v=9";
+import { ENEMY_DATA, WORLD_CONFIG, WAVE_BOSS_POOLS } from "./data.js?v=10";
 
 /**
  * 30 波次制動態生成、貪婪黃金哥布林亂入、隨機君王抽選與「大 Boss 清場單挑決鬥」管理器 (WaveManager)

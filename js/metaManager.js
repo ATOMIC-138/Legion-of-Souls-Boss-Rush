@@ -5,8 +5,8 @@ import {
   MYTHIC_RECIPES,
   SYNERGY_RULES,
   ENEMY_DATA
-} from "./data.js?v=9";
-import { SpriteRenderer } from "./spriteRenderer.js?v=9";
+} from "./data.js?v=10";
+import { SpriteRenderer } from "./spriteRenderer.js?v=10";
 
 /**
  * 局外永久天賦、主角傳說造型商場與魔導圖鑑管理器 (MetaProgressionManager)

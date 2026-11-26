@@ -1,4 +1,4 @@
-import { SpriteRenderer } from "./spriteRenderer.js?v=9";
+import { SpriteRenderer } from "./spriteRenderer.js?v=10";
 
 /**
  * Minion (隨從實體 - ★3 終極覺醒技 + ★★★★ 神話泰坦 + 陣型切換 + 單體破甲平衡版)
@@ -85,8 +85,8 @@ export class Minion {
     this.name =
       this.star >= 3 && this.awakenedName ? this.awakenedName : this.baseName;
 
-    // 神話 ★4 角色本身 baseStats 已是神話級，不再重複乘以 2.2^3
-    const starScale = this.isMythic ? 1.0 : Math.pow(2.2, this.star - 1);
+    // 神話 ★4 角色本身 baseStats 已是神話級；★1~★3 採用 1.9 倍升星成長以平衡多隻 ★3 與 ★4 體驗
+    const starScale = this.isMythic ? 1.0 : Math.pow(1.9, this.star - 1);
     const mods = this.synergyMods || this.getDefaultSynergyMods();
 
     const prevMaxHp = this.maxHp || 1;

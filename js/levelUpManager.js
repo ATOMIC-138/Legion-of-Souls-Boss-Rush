@@ -1,6 +1,6 @@
-import { MINION_DATA, MYTHIC_RECIPES, BOSS_CHEST_REWARDS } from "./data.js?v=9";
-import { Minion } from "./minion.js?v=9";
-import { SpriteRenderer } from "./spriteRenderer.js?v=9";
+import { MINION_DATA, MYTHIC_RECIPES, BOSS_CHEST_REWARDS } from "./data.js?v=10";
+import { Minion } from "./minion.js?v=10";
+import { SpriteRenderer } from "./spriteRenderer.js?v=10";
 
 /**
  * 升級抽卡、Reroll 刷新、三合一升星、★★★★ 神話跨種族融合 與 首領寶箱獎勵管理器 (LevelUpManager)
@@ -258,12 +258,45 @@ export class LevelUpManager {
   }
 
   getRandomCardChoices(count = 3) {
-    const pool = [...MINION_DATA];
-    for (let i = pool.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [pool[i], pool[j]] = [pool[j], pool[i]];
+    // 智慧湊星權重抽卡：已持有隨從（特別是 ★2 或 2/3 ★1 差一隻就升星者）獲得更高出現機率，
+    // 讓玩家在中後期能穩定養出 2~4 隻 ★3 隨從並順利融合 ★★★★ 神話泰坦！
+    const weightedPool = MINION_DATA.map((m) => {
+      const s1 = this.countMinionsByIdAndStar(m.id, 1);
+      const s2 = this.countMinionsByIdAndStar(m.id, 2);
+      const s3 = this.countMinionsByIdAndStar(m.id, 3);
+      let weight = 1.0;
+      if (s1 === 2 && s2 === 2) {
+        weight = 4.5; // 差一張直衝 ★3！
+      } else if (s2 === 2) {
+        weight = 3.2; // 已有兩隻 ★2，全力推進 ★3
+      } else if (s1 === 2) {
+        weight = 2.8; // 差一張合 ★2
+      } else if (s2 === 1) {
+        weight = 2.4; // 已有一隻 ★2，持續累積
+      } else if (s1 === 1) {
+        weight = 1.7;
+      } else if (s3 >= 1) {
+        weight = 0.45; // 已有 ★3 時降低重複率，把名額留給第二隻 ★3 湊神話融合
+      }
+      return { item: m, weight };
+    });
+
+    const choices = [];
+    const remaining = [...weightedPool];
+    for (let c = 0; c < count && remaining.length > 0; c++) {
+      const totalWeight = remaining.reduce((sum, entry) => sum + entry.weight, 0);
+      let r = Math.random() * totalWeight;
+      let pickedIdx = 0;
+      for (let i = 0; i < remaining.length; i++) {
+        r -= remaining[i].weight;
+        if (r <= 0) {
+          pickedIdx = i;
+          break;
+        }
+      }
+      choices.push(remaining[pickedIdx].item);
+      remaining.splice(pickedIdx, 1);
     }
-    const choices = pool.slice(0, count);
 
     // 若場上擁有可進行「★★★★ 神話超進化」的兩隻 ★3 隨從，第一張卡必出神話融合卡！
     const mythicMatch = this.findAvailableMythicFusion();

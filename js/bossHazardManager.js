@@ -1,4 +1,4 @@
-import { ObjectPool } from "./pool.js?v=9";
+import { ObjectPool } from "./pool.js?v=10";
 
 /**
  * 敵方彈幕、Boss 範圍預警圈、燃燒岩漿池與旋轉雷射系統 (BossHazardManager)

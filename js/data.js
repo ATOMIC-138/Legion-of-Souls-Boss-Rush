@@ -19,7 +19,7 @@ export const WORLD_CONFIG = {
   maxWaves: 30
 };
 
-// 隨從圖鑑 (Minion Data - 單體 vs 範圍平衡優化 + ★3 終極覺醒大招)
+// 隨從圖鑑 (Minion Data - 配合加速升星與 ★★★★ 神話體驗之平衡數值 + ★3 終極覺醒大招)
 export const MINION_DATA = [
   {
     id: "m_01",
@@ -27,7 +27,7 @@ export const MINION_DATA = [
     awakenedName: "骸骨死神騎士",
     tier: 1,
     tags: ["Undead", "Warrior"],
-    stats: { maxHp: 210, attackPower: 18, attackSpeed: 1.25, range: 58, moveSpeed: 92 },
+    stats: { maxHp: 185, attackPower: 15, attackSpeed: 1.25, range: 58, moveSpeed: 92 },
     attackType: "Melee",
     roleTag: "前排坦克 / 破甲斬擊",
     color: "#94a3b8",
@@ -41,7 +41,7 @@ export const MINION_DATA = [
     awakenedName: "殲滅者重砲機神",
     tier: 1,
     tags: ["Mech", "Ranger"],
-    stats: { maxHp: 95, attackPower: 25, attackSpeed: 1.15, range: 360, moveSpeed: 104 },
+    stats: { maxHp: 85, attackPower: 20, attackSpeed: 1.15, range: 360, moveSpeed: 104 },
     attackType: "Projectile",
     roleTag: "單體獵首 / 穿甲狙擊",
     color: "#f59e0b",
@@ -55,7 +55,7 @@ export const MINION_DATA = [
     awakenedName: "次元影皇・阿卡莉",
     tier: 1,
     tags: ["Void", "Assassin"],
-    stats: { maxHp: 105, attackPower: 38, attackSpeed: 1.15, range: 68, moveSpeed: 145 },
+    stats: { maxHp: 95, attackPower: 30, attackSpeed: 1.15, range: 68, moveSpeed: 145 },
     attackType: "Melee",
     roleTag: "單體爆發 / 瞬移處決",
     color: "#a855f7",
@@ -69,7 +69,7 @@ export const MINION_DATA = [
     awakenedName: "烈陽不死鳥・鳳凰",
     tier: 1,
     tags: ["Elemental", "Mage"],
-    stats: { maxHp: 100, attackPower: 17, attackSpeed: 1.3, range: 285, moveSpeed: 96 },
+    stats: { maxHp: 90, attackPower: 14, attackSpeed: 1.3, range: 285, moveSpeed: 96 },
     attackType: "Projectile",
     roleTag: "群體清場 / 元素爆裂",
     color: "#ef4444",
@@ -83,7 +83,7 @@ export const MINION_DATA = [
     awakenedName: "森羅古神・德魯伊",
     tier: 1,
     tags: ["Beast", "Priest"],
-    stats: { maxHp: 290, attackPower: 16, attackSpeed: 1.4, range: 74, moveSpeed: 92 },
+    stats: { maxHp: 255, attackPower: 13, attackSpeed: 1.4, range: 74, moveSpeed: 92 },
     attackType: "Melee",
     roleTag: "團隊治療 / 守護震波",
     color: "#10b981",
@@ -97,7 +97,7 @@ export const MINION_DATA = [
     awakenedName: "雷神泰坦裝甲",
     tier: 1,
     tags: ["Mech", "Warrior"],
-    stats: { maxHp: 280, attackPower: 22, attackSpeed: 1.05, range: 64, moveSpeed: 86 },
+    stats: { maxHp: 245, attackPower: 18, attackSpeed: 1.05, range: 64, moveSpeed: 86 },
     attackType: "Melee",
     roleTag: "重裝控制 / 磁暴震地",
     color: "#eab308",
@@ -111,7 +111,7 @@ export const MINION_DATA = [
     awakenedName: "冥府萬箭魔弓",
     tier: 1,
     tags: ["Undead", "Ranger"],
-    stats: { maxHp: 100, attackPower: 26, attackSpeed: 1.3, range: 340, moveSpeed: 104 },
+    stats: { maxHp: 90, attackPower: 21, attackSpeed: 1.3, range: 340, moveSpeed: 104 },
     attackType: "Projectile",
     roleTag: "穿透神箭 / 首領剋星",
     color: "#38bdf8",
@@ -125,7 +125,7 @@ export const MINION_DATA = [
     awakenedName: "血獄戰神・阿瑞斯",
     tier: 1,
     tags: ["Beast", "Warrior"],
-    stats: { maxHp: 230, attackPower: 29, attackSpeed: 1.3, range: 64, moveSpeed: 116 },
+    stats: { maxHp: 205, attackPower: 23, attackSpeed: 1.3, range: 64, moveSpeed: 116 },
     attackType: "Melee",
     roleTag: "狂暴處決 / 旋風吸血",
     color: "#f97316",
@@ -144,7 +144,7 @@ export const MYTHIC_RECIPES = [
     altIngredient: "m_04",
     recipeText: "★★★ 發條射手 + ★★★ 重裝機兵 (或星火小妖)",
     tags: ["Mech", "Ranger", "Warrior", "Elemental"],
-    stats: { maxHp: 3200, attackPower: 240, attackSpeed: 2.2, range: 400, moveSpeed: 125 },
+    stats: { maxHp: 2600, attackPower: 195, attackSpeed: 2.1, range: 400, moveSpeed: 125 },
     attackType: "Projectile",
     color: "#fbbf24",
     skillDesc: "【神話超進化】兼具超高單體重砲與範圍轟炸！普攻同時發射 3 發穿甲電磁砲與追蹤導彈",
@@ -158,7 +158,7 @@ export const MYTHIC_RECIPES = [
     altIngredient: "m_07",
     recipeText: "★★★ 骷髏步兵 + ★★★ 虛空潛影 (或幽魂獵手)",
     tags: ["Undead", "Void", "Assassin", "Warrior"],
-    stats: { maxHp: 2800, attackPower: 310, attackSpeed: 2.0, range: 95, moveSpeed: 165 },
+    stats: { maxHp: 2300, attackPower: 245, attackSpeed: 1.95, range: 95, moveSpeed: 165 },
     attackType: "Melee",
     color: "#e879f9",
     skillDesc: "【神話超進化】揮舞雙頭冥王巨鐮，每次揮砍皆必出爆擊並斬出十字虛空死光！",
@@ -172,7 +172,7 @@ export const MYTHIC_RECIPES = [
     altIngredient: "m_01",
     recipeText: "★★★ 祭祀巨熊 + ★★★ 荒野狂戰",
     tags: ["Beast", "Priest", "Warrior", "Elemental"],
-    stats: { maxHp: 3800, attackPower: 260, attackSpeed: 2.1, range: 90, moveSpeed: 145 },
+    stats: { maxHp: 3100, attackPower: 210, attackSpeed: 2.0, range: 90, moveSpeed: 145 },
     attackType: "Melee",
     color: "#34d399",
     skillDesc: "【神話超進化】荒古雷霆神獸！攻擊附帶狂雷爪擊，並持續散發神聖再生光環保護全軍",
@@ -573,51 +573,51 @@ export const BOSS_CHEST_REWARDS = [
   }
 ];
 
-// 局外永久天賦配置 (進階漸進式經濟曲線：基礎費用提升 6~10 倍並隨等級指數成長)
+// 局外永久天賦配置 (平緩友善成長曲線：前期輕鬆升級，後期逐步衝刺滿級)
 export const META_UPGRADE_CONFIG = [
   {
     id: "maxHpLevel",
     name: "❤️ 召喚師體魄",
     desc: "每級永久提升開局最大生命 +25",
-    baseCost: 200,
-    costStep: 150,
-    costGrowth: 1.28,
+    baseCost: 150,
+    costStep: 120,
+    costGrowth: 1.12,
     maxLevel: 10
   },
   {
     id: "startMinionsLevel",
     name: "👥 初始隨從編隊",
     desc: "每級開局額外多帶 +1 隻隨機隨從 (最高 +4)",
-    baseCost: 600,
-    costStep: 450,
-    costGrowth: 1.55,
+    baseCost: 400,
+    costStep: 350,
+    costGrowth: 1.22,
     maxLevel: 4
   },
   {
     id: "rerollLevel",
     name: "🎲 命運重骰次數",
     desc: "每級增加三選一抽卡刷新 (Reroll) 次數 +2",
-    baseCost: 300,
-    costStep: 200,
-    costGrowth: 1.35,
+    baseCost: 200,
+    costStep: 150,
+    costGrowth: 1.15,
     maxLevel: 6
   },
   {
     id: "attackBonusLevel",
     name: "⚔️ 統帥戰意強化",
     desc: "每級永久提升全軍隨從與主角傷害 +10%",
-    baseCost: 400,
-    costStep: 280,
-    costGrowth: 1.36,
+    baseCost: 250,
+    costStep: 180,
+    costGrowth: 1.15,
     maxLevel: 8
   },
   {
     id: "greedLevel",
     name: "💰 皇家賞金契約",
     desc: "每級永久提升結算與哥布林金幣收益 +20%",
-    baseCost: 500,
-    costStep: 350,
-    costGrowth: 1.45,
+    baseCost: 300,
+    costStep: 220,
+    costGrowth: 1.18,
     maxLevel: 5
   }
 ];

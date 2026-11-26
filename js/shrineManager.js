@@ -1,4 +1,4 @@
-import { SHRINE_TYPES } from "./data.js?v=9";
+import { SHRINE_TYPES } from "./data.js?v=10";
 
 /**
  * 地圖隨機互動機關與「太古聖壇事件」管理器 (ShrineManager)
@@ -319,20 +319,31 @@ export class ShrineManager {
       }
     }
 
-    const margin = 68;
+    const margin = 64;
     const halfW = canvasWidth / 2 - margin;
     const halfH = canvasHeight / 2 - margin;
+
+    // 計算「不被 UI 遮擋的安全可視區」，若哥布林或 Boss 躲在左側羈絆欄 / 頂部或底部 HUD 後方，指標箭頭依然會精準提示位置！
+    const synergyPanel =
+      typeof document !== "undefined" ? document.getElementById("synergy-panel") : null;
+    const isSynergyCollapsed = synergyPanel
+      ? synergyPanel.classList.contains("collapsed")
+      : false;
+    const leftSafe = isSynergyCollapsed ? 52 : 210;
+    const rightSafe = canvasWidth - 52;
+    const topSafe = 108;
+    const bottomSafe = canvasHeight - 110;
 
     for (const t of targets) {
       const screenX = t.x - camera.x;
       const screenY = t.y - camera.y;
 
-      // 若已在畫面內則不需邊緣箭頭
+      // 若已在中央清晰可視區內則不需邊緣箭頭
       if (
-        screenX >= 50 &&
-        screenX <= canvasWidth - 50 &&
-        screenY >= 50 &&
-        screenY <= canvasHeight - 50
+        screenX >= leftSafe &&
+        screenX <= rightSafe &&
+        screenY >= topSafe &&
+        screenY <= bottomSafe
       ) {
         continue;
       }

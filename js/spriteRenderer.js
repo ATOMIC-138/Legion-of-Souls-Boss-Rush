@@ -809,7 +809,18 @@ export class SpriteRenderer {
     } else if (enemy.id === "e_egg") {
       this._drawSpiderEgg(ctx, enemy, time, isHit);
     } else if (enemy.id === "e_goblin") {
-      // 💰 貪婪黃金哥布林盜寶賊：背著巨大發光黃金寶袋
+      // 💰 貪婪黃金哥布林盜寶賊：腳下脈動金光追蹤環 + 背著巨大發光黃金寶袋 (穿透半透明 UI 也極度顯眼！)
+      const pulse = 1 + Math.sin(time * 10) * 0.1;
+      ctx.save();
+      ctx.strokeStyle = "rgba(250, 204, 21, 0.9)";
+      ctx.fillStyle = "rgba(250, 204, 21, 0.18)";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.arc(0, 2, 24 * pulse, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
       const hop = Math.abs(Math.sin(time * 18)) * 5;
       ctx.translate(0, -hop);
 
